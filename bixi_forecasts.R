@@ -519,7 +519,7 @@ bi20 %>% group_by(Month) %>% count()
 ##Getting all member rides
 #Importing previous years and creating another variable
 all <- read.csv("date_allm_everyone.csv")
-all$Date <- as.Date(all$Date)
+all$Date <- mdy(all$Date)
 all$Year <- year(all$Date)
 head(all)
 
