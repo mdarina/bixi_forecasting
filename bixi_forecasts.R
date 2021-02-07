@@ -514,3 +514,34 @@ bi20$Month <- make_date(year(bi20$start_date), month(bi20$start_date),1)
 
 #Counting rides per month
 bi20 %>% group_by(Month) %>% count()
+
+#Plotting all rides from 2014-2020
+##Getting all member rides
+#Importing previous years and creating another variable
+all <- read.csv("date_allm_everyone.csv")
+all$Date <- as.Date(all$Date)
+all$Year <- year(all$Date)
+head(all)
+
+#Summing 14-19 rides by year
+sum1419 <- all %>% group_by(Year) %>% summarize(n=sum(Rides))
+sum1419
+
+#Summing 2020 rides by year
+#Counting rides per month
+sum20 <- cbind.data.frame(Year=2020, n=sum(bixi20$n))
+sum20
+
+#Combining data
+allrides14_20 <- rbind.data.frame(sum1419, sum20)
+allrides14_20
+
+#Plotting the rides
+ggplot(allrides14_20, aes(Year, n/1000, fill=as.character(Year)))+
+  geom_bar(stat="identity", position="dodge")+
+  geom_text(aes(label=comma(n)), position=position_dodge(width=0.9), vjust=-0.25)+
+  ylim(0, 6000)+
+  scale_fill_manual(values=c("gray74", "gray74", "gray74", "gray74", "gray74", "indianred1", "indianred4"))+
+  ggtitle("Member rides: By year (2014-2020)")+
+  ylab("Rides, '000")+
+  theme(legend.position="none")
