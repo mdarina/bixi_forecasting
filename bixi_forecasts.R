@@ -500,3 +500,17 @@ bixi_adj2020.ts <- ts(bixi_adj2020$Adj_FC, start=c(2020,1), freq=8)
 
 #Plotting the data
 autoplot(bixi2020) + autolayer(fitted(bixi2020))+autolayer(bixi_adj2020.ts)
+
+#Update: Actual BIXI data
+#Available here: https://bixi.com/en/page-27
+#Importing the 2020 file
+bixi2020 <- read.csv("OD_2020.csv")
+bi20 <- bixi2020[!bixi2020$duration_sec<300,]
+
+#Creating a new date
+class(bi20$start_date)
+bi20$start_date <- as.Date(bi20$start_date)
+bi20$Month <- make_date(year(bi20$start_date), month(bi20$start_date),1)
+
+#Counting rides per month
+bi20 %>% group_by(Month) %>% count()
